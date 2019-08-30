@@ -1,0 +1,27 @@
+** PostgreSQL Debian image with additional extensions
+
+This image uses the ~postgres:11~ image as base and adds extensions to
+it. The ~PGDATA~ variable is also modified to point to ~/data~ (I was
+tired of typing ~/var/lib/postgresql/data~).
+
+** Extension(s)
+
+*** sequential_uuids
+
+Completely random UUIDs introduce problems with locality of caches
+which can be mitigated by 'a little bit less random' UUIDs.
+
+The blog post below and the source repo describe the details.
+
+Blog: https://www.2ndquadrant.com/en/blog/sequential-uuid-generators/
+Extension source: https://github.com/tvondra/sequential-uuids
+
+
+Two new functions are available via this extension:
+
+#+BEGIN_SRC sql
+uuid_sequence_nextval(sequence regclass, block_size int default 65536, block_count int default 65536)
+
+uuid_time_nextval(interval_length int default 60, interval_count int default 65536) RETURNS uuid
+#+END_SRC
+
