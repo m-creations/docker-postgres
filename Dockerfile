@@ -1,14 +1,15 @@
 ## -*- docker-image-name: "mcreations/postgres" -*-
 
-FROM postgres:11
-
+FROM registry.opensource.zalan.do/acid/spilo-12:1.6-p3
 MAINTAINER Kambiz Darabi <darabi@m-creations.net>
-
-VOLUME /data/
-
-ENV PGDATA=/data
 
 ADD image/root/ /
 
-RUN mv /tmp/pg-extensions/*so /usr/lib/postgresql/$PG_MAJOR/lib &&\
-    mv /tmp/pg-extensions/* /usr/share/postgresql/$PG_MAJOR/extension
+RUN if [ -d /usr/lib/postgresql/11/lib ] ; then \
+        mv /tmp/pg-extensions/11/*so /usr/lib/postgresql/11/lib ; \
+        mv /tmp/pg-extensions/11/* /usr/share/postgresql/11/extension ; \
+    fi &&\
+    if [ -d /usr/lib/postgresql/12/lib ] ; then \
+        mv /tmp/pg-extensions/12/*so /usr/lib/postgresql/12/lib ; \
+        mv /tmp/pg-extensions/12/* /usr/share/postgresql/12/extension ; \
+    fi
